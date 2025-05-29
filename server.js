@@ -12,7 +12,7 @@ const db = admin.firestore();
 const app = express();
 
 // Налаштування CORS для локального розроблення та продакшену
-app.use(cors({ origin: ["http://localhost:3000", "https://your-frontend-domain.onrender.com"] }));
+app.use(cors({ origin: ["http://localhost:3000",  "https://web4-1-u5st.onrender.com"] }));
 app.use(express.json());
 
 // Middleware для перевірки токена авторизації
