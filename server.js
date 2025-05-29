@@ -10,23 +10,24 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const app = express();
-app.use(cors({ origin: ["http://localhost:3000", "https://web4-1-u5st.onrender.com"] }));
+app.use(cors({
+  origin: ["http://localhost:3000", "https://web4-1-u5st.onrender.com"],
+  credentials: true
+}));
 app.use(express.json());
 app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com; script-src 'self'; img-src 'self' data:;"
-  );
+  res.setHeader("Content-Security-Policy",
+  "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self';"
+);
   next();
 });
 
-const path = require("path");
-app.use(express.static(path.join(__dirname, "../my-react-app/build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../my-react-app/build", "index.html"));
-});
+// const path = require("path");
+// app.use(express.static(path.join(__dirname, "../my-react-app/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../my-react-app/build", "index.html"));
+// });
 
-// Middleware для перевірки токена авторизації
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -43,7 +44,18 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-// POST /api/orders - створення замовлення з expectedDeliveryTime
+app.get("/api/menu", async (req, res) => {
+  try {
+    const snapshot = await db.collection("menu").get();
+    const menu = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    res.json(menu);
+  } catch (error) {
+    console.error("Error fetching menu:", error);
+    res.status(500).json({ message: "Failed to fetch menu" });
+  }
+});
+
+
 app.post("/api/orders", verifyToken, async (req, res) => {
   try {
     const { dishes } = req.body;
@@ -79,7 +91,6 @@ app.post("/api/orders", verifyToken, async (req, res) => {
   }
 });
 
-// GET /api/orders - отримання всіх замовлень з expectedDeliveryTime у мілісекундах
 app.get("/api/orders", verifyToken, async (req, res) => {
   try {
     const userId = req.user.uid;
@@ -106,7 +117,6 @@ app.get("/api/orders", verifyToken, async (req, res) => {
   }
 });
 
-// PATCH /api/orders/:id/confirm - підтвердження отримання замовлення
 app.patch("/api/orders/:id/confirm", verifyToken, async (req, res) => {
   const orderId = req.params.id;
   try {
