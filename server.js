@@ -10,10 +10,21 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const app = express();
-
-// Налаштування CORS для локального розроблення та продакшену
-app.use(cors({ origin: ["http://localhost:3000",  "https://web4-1-u5st.onrender.com"] }));
+app.use(cors({ origin: ["http://localhost:3000", "https://web4-1-u5st.onrender.com"] }));
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com; script-src 'self'; img-src 'self' data:;"
+  );
+  next();
+});
+
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../my-react-app/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../my-react-app/build", "index.html"));
+});
 
 // Middleware для перевірки токена авторизації
 const verifyToken = async (req, res, next) => {
