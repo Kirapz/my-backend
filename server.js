@@ -32,14 +32,15 @@ app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; font-src 'self' https://fonts.gstatic.com; " +
+    "default-src 'self'; " +
+    "font-src 'self' https://fonts.gstatic.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-    "script-src 'self'; img-src 'self' data:;"
-  ); 
-
+    "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "script-src 'self'; " +
+    "img-src 'self' data:;"
+  );
   next();
 });
-
 
 // const path = require("path");
 // app.use("/", express.static(path.join(__dirname, "../my-react-app/build")));
