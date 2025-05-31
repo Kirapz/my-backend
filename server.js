@@ -41,12 +41,12 @@ app.use((req, res, next) => {
 });
 
 
-const path = require("path");
-app.use("/", express.static(path.join(__dirname, "../my-react-app/build")));
+// const path = require("path");
+// app.use("/", express.static(path.join(__dirname, "../my-react-app/build")));
 
-app.get("*", function (req, res) {
-  res.sendFile(path.resolve(__dirname, "../my-react-app/build", "index.html"));
-});
+// app.get("*", function (req, res) {
+//   res.sendFile(path.resolve(__dirname, "../my-react-app/build", "index.html"));
+// });
 
 
 
