@@ -95,7 +95,7 @@ app.post("/api/orders", verifyToken, async (req, res) => {
     }));
 
     const createdAt = admin.firestore.FieldValue.serverTimestamp();
-    const expectedDeliveryTime = new Date(Date.now() + 30 * 60 * 1000); // через 30 хвилин
+    const expectedDeliveryTime = new Date(Date.now() + 30 * 1000); 
 
     const order = {
       userId,
