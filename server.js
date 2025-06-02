@@ -21,7 +21,7 @@ app.use(
       "http://localhost:3000",
       "https://lab4-4ca1e.web.app",
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
 );
@@ -40,14 +40,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-
-// const path = require("path");
-// app.use("/", express.static(path.join(__dirname, "../my-react-app/build")));
-
-// app.get("*", function (req, res) {
-//   res.sendFile(path.resolve(__dirname, "../my-react-app/build", "index.html"));
-// });
-
 
 
 // Middleware для перевірки токена авторизації
