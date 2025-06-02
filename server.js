@@ -13,6 +13,8 @@ admin.initializeApp({
 const db = admin.firestore();
 const app = express();
 
+app.options('*', cors()); 
+
 app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(
