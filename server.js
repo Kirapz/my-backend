@@ -19,7 +19,6 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://web4-1-u5st.onrender.com",
       "https://lab4-4ca1e.web.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -67,6 +66,17 @@ const verifyToken = async (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized: Invalid token" });
   }
 };
+
+app.get("/api/menu", async (req, res) => {
+  try {
+    const snapshot = await db.collection("menu").get();
+    const menuItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.json(menuItems);
+  } catch (error) {
+    console.error("Error fetching menu:", error);
+    res.status(500).json({ message: "Failed to fetch menu" });
+  }
+});
 
 // POST /api/orders - створення замовлення з expectedDeliveryTime
 app.post("/api/orders", verifyToken, async (req, res) => {
